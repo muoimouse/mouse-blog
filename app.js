@@ -34,6 +34,7 @@ const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
+const articleController = require('./controllers/article');
 
 /**
  * API keys and Passport configuration.
@@ -62,7 +63,7 @@ mongoose.connection.on('error', (err) => {
 app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0');
 app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
@@ -119,9 +120,9 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
  * Primary app routes.
  */
 app.get('/', homeController.index);
-app.get('/login', userController.getLogin);
-app.post('/login', userController.postLogin);
-app.get('/logout', userController.logout);
+// app.get('/login', userController.getLogin);
+// app.post('/login', userController.postLogin);
+// app.get('/logout', userController.logout);
 app.get('/forgot', userController.getForgot);
 app.post('/forgot', userController.postForgot);
 app.get('/reset/:token', userController.getReset);
@@ -135,6 +136,25 @@ app.post('/account/profile', passportConfig.isAuthenticated, userController.post
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
+
+/**
+ * Admin routes.
+ */
+app.get('/admin/login', userController.getLogin);
+app.post('/admin/login', userController.postLogin);
+app.get('/admin/logout', userController.logout);
+
+app.get('/admin/index', passportConfig.isAuthenticated, (req, res) => {
+  res.render('admin/index');
+});
+app.get('/admin/list-user', passportConfig.isAuthenticated, userController.listUser);
+app.get('/admin/register-user', passportConfig.isAuthenticated, userController.getRegisterUser);
+app.post('/admin/register-user', passportConfig.isAuthenticated, userController.postRegisterUser);
+app.get('/admin/profile', passportConfig.isAuthenticated, userController.getAccount);
+app.post('/admin/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
+app.post('/admin/updatePassword', passportConfig.isAuthenticated, userController.postUpdatePassword);
+app.get('/admin/list-article', passportConfig.isAuthenticated, articleController.getListArticle);
+app.get('/admin/create-article', passportConfig.isAuthenticated, articleController.getCreateArticle);
 
 /**
  * API examples routes.

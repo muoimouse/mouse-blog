@@ -3,18 +3,23 @@ const crypto = bluebird.promisifyAll(require('crypto'));
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
+const moment = require('moment');
 
 /**
- * GET /login
- * Login page.
+ * GET /admin/login
+ * Login Admin page.
  */
 exports.getLogin = (req, res) => {
   if (req.user) {
-    return res.redirect('/');
+    return res.redirect('/admin/index');
   }
-  res.render('account/login', {
-    title: 'Login'
-  });
+  const options = {
+    title: 'Login Admin'
+  };
+  if (req.flash) {
+    options.errors = req.flash('errors');
+  }
+  res.render('admin/account/login', options);
 };
 
 /**
@@ -30,19 +35,19 @@ exports.postLogin = (req, res, next) => {
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/login');
+    return res.redirect('/admin/login');
   }
 
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
       req.flash('errors', info);
-      return res.redirect('/login');
+      return res.redirect('/admin/login');
     }
     req.logIn(user, (err) => {
       if (err) { return next(err); }
       req.flash('success', { msg: 'Success! You are logged in.' });
-      res.redirect(req.session.returnTo || '/');
+      res.redirect(req.session.returnTo || '/admin/index');
     });
   })(req, res, next);
 };
@@ -56,7 +61,7 @@ exports.logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) console.log('Error : Failed to destroy the session during logout.', err);
     req.user = null;
-    res.redirect('/');
+    res.redirect('/admin/login');
   });
 };
 
@@ -114,13 +119,22 @@ exports.postSignup = (req, res, next) => {
 };
 
 /**
- * GET /account
+ * GET /admin/account/profile
  * Profile page.
  */
 exports.getAccount = (req, res) => {
-  res.render('account/profile', {
-    title: 'Account Management'
-  });
+  User.findOne({ email: req.user.email }).then((result) => {
+    const options = {
+      profile: result
+    };
+    if (req.flash) {
+      options.errors = req.flash('errors');
+      options.message = req.flash('message');
+    }
+    res.render('admin/profile', options);
+  }).catch((err) => {
+    res.render('404');
+  })
 };
 
 /**
@@ -135,26 +149,25 @@ exports.postUpdateProfile = (req, res, next) => {
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/account');
+    return res.redirect('/admin/profile');
   }
 
   User.findById(req.user.id, (err, user) => {
     if (err) { return next(err); }
-    user.email = req.body.email || '';
     user.profile.name = req.body.name || '';
     user.profile.gender = req.body.gender || '';
-    user.profile.location = req.body.location || '';
+    user.profile.city = req.body.city || '';
     user.profile.website = req.body.website || '';
     user.save((err) => {
       if (err) {
         if (err.code === 11000) {
           req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
-          return res.redirect('/account');
+          return res.redirect('/admin/profile');
         }
         return next(err);
       }
       req.flash('success', { msg: 'Profile information has been updated.' });
-      res.redirect('/account');
+      res.redirect('/admin/profile');
     });
   });
 };
@@ -171,7 +184,7 @@ exports.postUpdatePassword = (req, res, next) => {
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/account');
+    return res.redirect('/admin/profile');
   }
 
   User.findById(req.user.id, (err, user) => {
@@ -179,8 +192,8 @@ exports.postUpdatePassword = (req, res, next) => {
     user.password = req.body.password;
     user.save((err) => {
       if (err) { return next(err); }
-      req.flash('success', { msg: 'Password has been changed.' });
-      res.redirect('/account');
+      req.flash('message', { msg: 'Password has been changed.' });
+      res.redirect('/admin/profile');
     });
   });
 };
@@ -377,4 +390,75 @@ exports.postForgot = (req, res, next) => {
     .then(sendForgotPasswordEmail)
     .then(() => res.redirect('/forgot'))
     .catch(next);
+};
+
+/**
+ * GET /admin/list-user
+ * get all users
+ */
+exports.listUser = (req, res, next) => {
+  User.find().then((results) => {
+    res.render('admin/list_user', {
+      listUser: results,
+      moment: moment
+    });
+  }).catch((err) => {
+    res.render('404');
+  });
+};
+
+/**
+ * GET /admin/create-user
+ * get cretae user page
+ */
+exports.getRegisterUser = (req, res, next) => {
+  const options = {};
+  if (req.flash) {
+    options.errors = req.flash('errors');
+    options.message = req.flash('message');
+  }
+  res.render('admin/register_user', options);
+};
+
+/**
+ * POST /admin/create-user
+ */
+exports.postRegisterUser = (req, res, next) => {
+  console.log(req.body);
+  req.assert('email', 'Email is not valid').isEmail();
+  req.assert('password', 'Password must be at least 4 characters long').len(4);
+  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+
+  const errors = req.validationErrors();
+
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/admin/register-user');
+  }
+
+  const name = req.body.firstname + ' ' + req.body.lastname;
+  const user = new User({
+    email: req.body.email,
+    password: req.body.password,
+    profile: { name: name, gender: req.body.gender }
+  });
+
+  User.findOne({ email: req.body.email }, (err, existingUser) => {
+    if (err) { return next(err); }
+    if (existingUser) {
+      req.flash('errors', { msg: 'Account with that email address already exists.' });
+      return res.redirect('/admin/register-user');
+    }
+    user.save((err) => {
+      if (err) { return next(err); }
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        req.flash('message', { msg: 'Account was created.' });
+        res.redirect('/admin/register-user');
+      });
+    });
+  });
 };

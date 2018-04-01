@@ -7,6 +7,11 @@ const userSchema = new mongoose.Schema({
   password: String,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  userCategory: {
+    type: String,
+    enum: ['admin', 'member'],
+    default: 'member'
+  },
 
   facebook: String,
   twitter: String,
@@ -19,8 +24,12 @@ const userSchema = new mongoose.Schema({
 
   profile: {
     name: String,
-    gender: String,
-    location: String,
+    gender: {
+      type: String,
+      default: 'male',
+      enum: ['male', 'female']
+    },
+    city: String,
     website: String,
     picture: String
   }
