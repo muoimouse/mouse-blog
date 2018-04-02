@@ -5,6 +5,8 @@ services:
     environment:
       - "TZ=Asia/Bangkok"
     image: mongo:3.6
+    volumes:
+      - ./data/db:./data/db
     ports:
       - 27017:27017
   web:
@@ -30,6 +32,7 @@ services:
       - web
     volumes:
       - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./config/ssl/local/:/var/ssl/local
     ports:
       - 80:80
       - 443:443

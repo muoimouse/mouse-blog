@@ -17,3 +17,24 @@
  * - BODY
  * - CUSTOM STYLES
  */
+
+span.tag.label.label-info{
+    display: inline-block;
+    color: white;
+}
+
+.note-editor .modal-dialog {
+    margin: 30px auto;
+    padding: none;
+    box-sizing: border-box;
+}
+.smart-form .modal-content .modal-title{
+    padding: 10px;
+}
+.smart-form .note-modal-form .modal-body{
+    padding: 10px;
+    box-sizing: border-box;
+}
+.smart-form .note-modal-form .modal-footer{
+    padding: 10px;
+}

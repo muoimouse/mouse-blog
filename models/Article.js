@@ -10,7 +10,7 @@ const articleSchema = new mongoose.Schema({
   tags: Array,
   articleCategory: String,
   image: String
-}, { timestamp: true });
+}, { timestamps: true });
 
 const Article = mongoose.model('Article', articleSchema);
 

@@ -17,10 +17,19 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
-const sass = require('node-sass-middleware');
 const multer = require('multer');
+const moment = require('moment');
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+const now = moment(moment.now().ISO_8601).format('YYYY-MM-DD');
+
+const imageFilter = (req, file, cb) => {
+  console.log(file);
+  if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.mimetype)) {
+    return cb(null, true);
+  }
+  return cb(null, false);
+};
+const upload = multer({ dest: path.join(__dirname, `public/uploads/${now}`), fileFilter: imageFilter });
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -35,6 +44,7 @@ const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 const articleController = require('./controllers/article');
+// const categoryControler = require('./controllers/ca')
 
 /**
  * API keys and Passport configuration.
@@ -66,12 +76,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(expressStatusMonitor());
 app.use(compression());
-app.use(sass({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public')
-}));
 app.use(logger('dev'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '1mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
 app.use(session({
@@ -88,7 +94,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
+  if (req.method === 'POST' && ['/admin/create-article'].includes(req.path)) {
     next();
   } else {
     lusca.csrf()(req, res, next);
@@ -155,6 +161,7 @@ app.post('/admin/profile', passportConfig.isAuthenticated, userController.postUp
 app.post('/admin/updatePassword', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.get('/admin/list-article', passportConfig.isAuthenticated, articleController.getListArticle);
 app.get('/admin/create-article', passportConfig.isAuthenticated, articleController.getCreateArticle);
+app.post('/admin/create-article', passportConfig.isAuthenticated, upload.single('image'), articleController.postCreateArticle);
 
 /**
  * API examples routes.
