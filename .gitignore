@@ -36,7 +36,8 @@ modules.xml
 
 # Folder config file
 Desktop.ini
-config/ssl/server_key
+config/ssl/server
+data
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/

@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 console.log('Creating Account');
 dotenv.load({ path: '.env.example' });
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI).then(() => {
+mongoose.connect('mongodb://localhost:27017/mouse-blog').then(() => {
   const user = new User({
     email: process.env.ADMIN_EMAIL,
     password: process.env.ADMIN_PASSWORD,
@@ -20,4 +20,4 @@ mongoose.connect(process.env.MONGODB_URI).then(() => {
     console.log('Account is existing');
     mongoose.connection.close();
   }).catch((err) => { console.log(err); });
-}).catch(() => { console.log('Connect mongo fail'); });
+}).catch((err) => { console.log(err); });
