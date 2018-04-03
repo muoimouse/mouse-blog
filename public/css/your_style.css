@@ -18,14 +18,19 @@
  * - CUSTOM STYLES
  */
 
+/**
+ * update style for label
+ */
 span.tag.label.label-info{
     display: inline-block;
     color: white;
 }
 
+/**
+ * update style for dialog
+ */
 .note-editor .modal-dialog {
     margin: 30px auto;
-    padding: none;
     box-sizing: border-box;
 }
 .smart-form .modal-content .modal-title{
@@ -36,5 +41,11 @@ span.tag.label.label-info{
     box-sizing: border-box;
 }
 .smart-form .note-modal-form .modal-footer{
+    padding: 10px;
+}
+.smart-form .note-modal-form .modal-footer button{
+    padding: 10px;
+}
+.smart-form .note-modal-form .modal-body h5{
     padding: 10px;
 }

@@ -99,6 +99,27 @@
               </div>
               <!-- end widget edit box -->
 
+                <% if (errors.length) { %>
+                <div class="alert alert-danger fade in">
+                    <button class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                    <i class="fa-fw fa fa-times"></i>
+                    <strong>Error!</strong> <%= errors[0].msg %>
+                </div>
+                <% } %>
+
+                <% if (message.length) { %>
+                <div class="alert alert-success fade in">
+                    <button class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                    <i class="fa-fw fa fa-check"></i>
+                    <strong>Success</strong> <%= message[0].msg %>
+                </div>
+                <% } %>
+
+
               <!-- widget content -->
               <div class="widget-body no-padding">
                 <div id="dialog-confirm" title="Empty the recycle bin?" style="display: none">
@@ -123,7 +144,7 @@
                     <td><%= listArticle[i].articleCategory %></td>
                     <td><%= listArticle[i].tags %></td>
                     <td>
-                      <button class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></button>
+                      <button class="btn btn-xs btn-default" onclick="editItem('<%= listArticle[i].title%>')"><i class="fa fa-pencil"></i></button>
                       <button class="btn btn-xs btn-default" onclick="deleteItem('<%= listArticle[i].title%>')"><i class="fa fa-times"></i></button>
                     </td>
                   </tr>
@@ -163,7 +184,9 @@
 <script type="text/javascript">
 
   // DO NOT REMOVE : GLOBAL FUNCTIONS!
-
+  function editItem(title) {
+      window.location = '/admin/create-article?title=' + title;
+  }
   function deleteItem(title) {
     $("#dialog-confirm").dialog({
       resizable: false,
@@ -172,20 +195,14 @@
       modal: true,
       buttons: {
         "Delete item?": function () {
-          $.ajax({
-            url: "/admin/delete-article?title=" + title,
-            method: "GET"
-          });
           $(this).dialog("close");
+          window.location = '/admin/delete-article?title=' + title;
         },
         Cancel: function () {
           $(this).dialog("close");
         }
       }
     });
-  }
-  function editItem(title) {
-    window.location = '/admin/update-article?title=' + title;
   }
   $(document).ready(function() {
     pageSetUp();

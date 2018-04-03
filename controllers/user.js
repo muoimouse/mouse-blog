@@ -132,9 +132,9 @@ exports.getAccount = (req, res) => {
       options.message = req.flash('message');
     }
     res.render('admin/profile', options);
-  }).catch((err) => {
+  }).catch(() => {
     res.render('404');
-  })
+  });
 };
 
 /**
@@ -396,13 +396,13 @@ exports.postForgot = (req, res, next) => {
  * GET /admin/list-user
  * get all users
  */
-exports.listUser = (req, res, next) => {
+exports.listUser = (req, res) => {
   User.find().then((results) => {
     res.render('admin/list_user', {
       listUser: results,
       moment: moment
     });
-  }).catch((err) => {
+  }).catch(() => {
     res.render('404');
   });
 };
@@ -424,7 +424,6 @@ exports.getRegisterUser = (req, res, next) => {
  * POST /admin/create-user
  */
 exports.postRegisterUser = (req, res, next) => {
-  console.log(req.body);
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password must be at least 4 characters long').len(4);
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
@@ -436,7 +435,6 @@ exports.postRegisterUser = (req, res, next) => {
     req.flash('errors', errors);
     return res.redirect('/admin/register-user');
   }
-
   const name = req.body.firstname + ' ' + req.body.lastname;
   const user = new User({
     email: req.body.email,

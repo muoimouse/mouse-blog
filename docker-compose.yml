@@ -5,8 +5,8 @@ services:
     environment:
       - "TZ=Asia/Bangkok"
     image: mongo:3.6
-#    volumes:
-#      - ./data/db:/data/db
+    volumes:
+      - ./data/db:/data/db
     ports:
       - 27017:27017
   web:
