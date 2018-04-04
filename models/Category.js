@@ -5,6 +5,8 @@ const categorySchema = new mongoose.Schema({
   type: { type: String, default: 'tag' }
 }, { timestamp: true });
 
+categorySchema.set('autoIndex', true);
+
 const Category = mongoose.model('Category', categorySchema);
 
 module.exports = Category;

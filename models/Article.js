@@ -12,6 +12,8 @@ const articleSchema = new mongoose.Schema({
   image: String
 }, { timestamps: true });
 
+articleSchema.set('autoIndex', true);
+
 const Article = mongoose.model('Article', articleSchema);
 
 module.exports = Article;

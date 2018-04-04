@@ -136,6 +136,7 @@ exports.postCreateArticle = (req, res) => {
  * @param res
  */
 exports.postUpdateArticle = (req, res) => {
+  console.log(req);
   req.assert('title', 'title is not empty').notEmpty();
   req.assert('articleCategory', 'category is not empty').notEmpty();
   req.assert('tags', 'tags is not empty').notEmpty();

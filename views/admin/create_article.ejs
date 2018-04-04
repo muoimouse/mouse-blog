@@ -134,7 +134,7 @@
                                                         <% if (listCategory.length) {
                                                             for (var category of listCategory) {
                                                         %>
-                                                        <option value="<%=category.name %>"><%=category.name %></option>
+                                                        <option <% if (article.articleCategory === category.name) { %> selected="" <% } %> value="<%=category.name %>"><%=category.name %></option>
                                                         <% }} %>
                                                     </select>
                                                 </label>

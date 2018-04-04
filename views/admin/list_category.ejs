@@ -144,7 +144,6 @@
                                         <td><%= listCategory[i].type %></td>
                                         <td><%= mnt(listCategory[i].createdAt).format() %></td>
                                         <td>
-                                            <button class="btn btn-xs btn-default" onclick="editItem('<%= listCategory[i].name%>')"><i class="fa fa-pencil"></i></button>
                                             <button class="btn btn-xs btn-default" onclick="deleteItem('<%= listCategory[i].name%>')"><i class="fa fa-times"></i></button>
                                         </td>
                                     </tr>
@@ -184,10 +183,7 @@
 <script type="text/javascript">
 
     // DO NOT REMOVE : GLOBAL FUNCTIONS!
-    function editItem(title) {
-        window.location = '/admin/create-article?title=' + title;
-    }
-    function deleteItem(title) {
+    function deleteItem(name) {
         $("#dialog-confirm").dialog({
             resizable: false,
             height: "auto",
@@ -196,7 +192,7 @@
             buttons: {
                 "Delete item?": function () {
                     $(this).dialog("close");
-                    window.location = '/admin/delete-article?title=' + title;
+                    window.location = '/admin/delete-category?name=' + name;
                 },
                 Cancel: function () {
                     $(this).dialog("close");

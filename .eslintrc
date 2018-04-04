@@ -17,6 +17,7 @@
     "no-plusplus": 0,
     "no-unused-expressions": 0,
     "chai-friendly/no-unused-expressions": 2,
-    "linebreak-style": "off"
+    "linebreak-style": "off",
+    "no-trailing-spaces": "off"
   }
 }

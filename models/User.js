@@ -17,9 +17,6 @@ const userSchema = new mongoose.Schema({
   twitter: String,
   google: String,
   github: String,
-  instagram: String,
-  linkedin: String,
-  steam: String,
   tokens: Array,
 
   profile: {
@@ -34,6 +31,8 @@ const userSchema = new mongoose.Schema({
     picture: String
   }
 }, { timestamps: true });
+
+userSchema.set('autoIndex', true);
 
 /**
  * Password hash middleware.

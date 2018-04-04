@@ -44,7 +44,7 @@ const userController = require('./controllers/user');
 // const apiController = require('./controllers/api');
 // const contactController = require('./controllers/contact');
 const articleController = require('./controllers/article');
-const categoryControler = require('./controllers/category')
+const categoryControler = require('./controllers/category');
 
 /**
  * API keys and Passport configuration.
@@ -168,7 +168,9 @@ app.get('/admin/delete-article', passportConfig.isAuthenticated, articleControll
 
 app.get('/admin/list-category', passportConfig.isAuthenticated, categoryControler.getListCategory);
 app.get('/admin/create-category', passportConfig.isAuthenticated, categoryControler.getCreateCategory);
+app.get('/admin/delete-category', passportConfig.isAuthenticated, categoryControler.getDeleteCategory);
 app.post('/admin/create-category', passportConfig.isAuthenticated, categoryControler.postCategory);
+
 /**
  * API examples routes.
  */

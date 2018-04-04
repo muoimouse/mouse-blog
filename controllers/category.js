@@ -53,7 +53,6 @@ exports.getCreateCategory = (req, res) => {
  * @param res
  */
 exports.postCategory = (req, res) => {
-  console.log(req);
   const redirectPath = '/admin/create-category';
   req.assert('name', 'name is not empty').notEmpty();
   const errors = req.validationErrors();
@@ -72,4 +71,21 @@ exports.postCategory = (req, res) => {
       res.redirect(redirectPath);
     });
   }
+};
+
+exports.getDeleteCategory = (req, res) => {
+  const redirectPath = '/admin/list-category';
+  req.assert('name', 'name is not empty').notEmpty();
+  const errors = req.validationErrors();
+
+  if (errors) {
+    req.flash('errors', errors);
+  }
+  Category.findOneAndRemove({ name: req.query.name }).then(() => {
+    req.flash('message', 'Category deleted');
+    res.redirect(redirectPath);
+  }).catch(() => {
+    req.flash('errors', 'Delete category fail');
+    res.redirect(redirectPath);
+  });
 };
