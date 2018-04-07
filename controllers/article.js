@@ -32,7 +32,10 @@ function createTags(req) {
  */
 exports.getListArticle = async (req, res) => {
   await Article.find().then((results) => {
-    const options = { listArticle: results };
+    const options = {
+      username: req.user.profile.name,
+      listArticle: results
+    };
     if (req.flash) {
       options.errors = req.flash('errors');
       options.message = req.flash('message');
@@ -50,7 +53,10 @@ exports.getListArticle = async (req, res) => {
  * @param res
  */
 exports.getCreateArticle = async (req, res) => {
-  const options = { article: {} };
+  const options = {
+    username: req.user.profile.name,
+    article: {}
+  };
   await Category.find({ type: 'category' }).then((results) => {
     options.listCategory = results;
   });

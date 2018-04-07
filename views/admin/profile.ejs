@@ -115,7 +115,7 @@
 
                     <section>
                       <label class="input"> <i class="icon-append fa fa-user"></i>
-                        <input type="text" name="name" placeholder="Name" value="<%= profile.name %>">
+                        <input type="text" name="name" placeholder="Name" value="<%= profile.profile.name %>">
                       </label>
                     </section>
 
@@ -139,8 +139,8 @@
                         <label class="select">
                           <select name="gender">
                             <option value="0" disabled="">Gender</option>
-                            <option value="male" <% 'selected' ? (profile.profile.gender === 'male') : ''%>>Male</option>
-                            <option value="female" <% 'selected' ? (profile.profile.gender === 'female') : ''%>>Female</option>
+                            <option value="male" <% if(profile.profile.gender === 'male') { %> selected=""  <% } %>>Male</option>
+                            <option value="female" <% if(profile.profile.gender === 'female') { %> selected=""  <% } %>>Female</option>
                           </select> <i></i> </label>
                       </section>
 

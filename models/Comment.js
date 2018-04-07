@@ -5,7 +5,10 @@ const commentScheema = new mongoose.Schema({
   email: String,
   content: String,
   articleName: String,
-  replyTo: Object,
+  replyTo: {
+    type: Object,
+    default: null
+  },
   active: {
     type: Boolean,
     default: false

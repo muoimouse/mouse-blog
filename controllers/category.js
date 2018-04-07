@@ -25,6 +25,7 @@ function saveCategory(req, res) {
 exports.getListCategory = (req, res) => {
   Category.find().then((results) => {
     const options = {
+      username: req.user.profile.name,
       listCategory: results,
       mnt: moment
     };
@@ -39,7 +40,9 @@ exports.getListCategory = (req, res) => {
 };
 
 exports.getCreateCategory = (req, res) => {
-  const options = {};
+  const options = {
+    username: req.user.profile.name,
+  };
   if (req.flash) {
     options.errors = req.flash('errors');
     options.message = req.flash('message');

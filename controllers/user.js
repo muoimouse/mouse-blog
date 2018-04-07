@@ -123,18 +123,11 @@ exports.postSignup = (req, res, next) => {
  * Profile page.
  */
 exports.getAccount = (req, res) => {
-  User.findOne({ email: req.user.email }).then((result) => {
-    const options = {
-      profile: result
-    };
-    if (req.flash) {
-      options.errors = req.flash('errors');
-      options.message = req.flash('message');
-    }
-    res.render('admin/profile', options);
-  }).catch(() => {
-    res.render('404');
-  });
+  const options = {
+    username: req.user.profile.name,
+    profile: req.user
+  };
+  res.render('admin/profile', options);
 };
 
 /**
@@ -398,10 +391,12 @@ exports.postForgot = (req, res, next) => {
  */
 exports.listUser = (req, res) => {
   User.find().then((results) => {
-    res.render('admin/list_user', {
+    const options = {
+      username: req.user.profile.name,
       listUser: results,
       moment: moment
-    });
+    };
+    res.render('admin/list_user', options);
   }).catch(() => {
     res.render('404');
   });
@@ -412,7 +407,9 @@ exports.listUser = (req, res) => {
  * get cretae user page
  */
 exports.getRegisterUser = (req, res, next) => {
-  const options = {};
+  const options = {
+    username: req.user.profile.name,
+  };
   if (req.flash) {
     options.errors = req.flash('errors');
     options.message = req.flash('message');
