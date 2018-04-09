@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
 
 const commentScheema = new mongoose.Schema({
+  userId: Object,
   username: { type: String, default: 'Anonymous' },
-  email: String,
   content: String,
-  articleName: String,
+  articleTitle: String,
+  articleId: Object,
   replyTo: {
     type: Object,
     default: null
   },
   active: {
     type: Boolean,
-    default: false
+    default: true
   },
 }, { timestamps: true });
 
