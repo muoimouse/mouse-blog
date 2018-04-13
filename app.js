@@ -46,6 +46,8 @@ const userController = require('./controllers/user');
 const articleController = require('./controllers/article');
 const categoryControler = require('./controllers/category');
 
+const articleApiController = require('./controllers/article_api');
+
 /**
  * API keys and Passport configuration.
  */
@@ -175,7 +177,17 @@ app.get('/admin/delete-category', passportConfig.isAuthenticated, categoryContro
 app.post('/admin/create-category', passportConfig.isAuthenticated, categoryControler.postCategory);
 
 /**
- * Error Handler.
+ * API routes
+ */
+const Router = express.Router();
+app.use('/api/v1', Router);
+Router.get('/article', articleApiController.getLastArticle);
+Router.get('/article/info', articleApiController.getArticleInfo);
+Router.get('/article/tag', articleApiController.getArticleByTag);
+Router.get('/article/category', articleApiController.getArticleByCategory);
+
+/**
+ * Error Handler
  */
 app.use(errorHandler());
 
