@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 console.log('Creating Account');
 dotenv.load({ path: '.env.example' });
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/mouse-blog').then(() => {
+mongoose.connect('mongodb://mongo:27017/mouse-blog').then(() => {
   const user = new User({
     email: process.env.ADMIN_EMAIL,
     password: process.env.ADMIN_PASSWORD,
