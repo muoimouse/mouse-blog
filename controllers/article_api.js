@@ -22,8 +22,7 @@ exports.getLastArticle = (req, res) => {
  */
 exports.getArticleInfo = (req, res) => {
   const response = {};
-  req.assert('category', 'category can not be blank').notEmpty();
-  req.assert('title', 'title can not be blank').notEmpty();
+  req.assert('id', 'id can not be blank').notEmpty();
 
   const errors = req.validationErrors();
   if (errors) {
@@ -31,8 +30,7 @@ exports.getArticleInfo = (req, res) => {
   }
 
   Article.findOne({
-    articleCategory: req.query.category,
-    title: req.query.title
+    _id: req.query.id,
   }).then((result) => {
     response.data = result || {};
     res.json(response);

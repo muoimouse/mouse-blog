@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const articleSchema = new mongoose.Schema({
   title: { type: String, unique: true },
+  keyword: { type: String, unique: true },
   content: String,
   author: {
     type: String,

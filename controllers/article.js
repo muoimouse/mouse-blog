@@ -1,6 +1,7 @@
 const Article = require('../models/Article');
 const category = require('../controllers/category');
 const Category = require('../models/Category');
+const changeAlias = require('../utils/convertString');
 
 const moment = require('moment');
 const fs = require('fs');
@@ -106,6 +107,7 @@ exports.postCreateArticle = (req, res) => {
     // Define new article
     const article = new Article({
       title: req.body.title,
+      keyword: changeAlias(req.body.title),
       tags: req.body.tags.split(','),
       articleCategory: req.body.articleCategory,
       content: req.body.content
@@ -154,6 +156,7 @@ exports.postUpdateArticle = (req, res) => {
   }
   const article = {
     title: req.body.title,
+    keyword: changeAlias(req.body.title),
     tags: req.body.tags.split(','),
     articleCategory: req.body.articleCategory,
     content: req.body.content
@@ -161,7 +164,7 @@ exports.postUpdateArticle = (req, res) => {
   if (req.file) {
     article.image = `${now}/${req.file.filename}`;
   }
-  const redirectPath = '/admin/create-article?title=' + req.body.title;
+  const redirectPath = `/admin/create-article?title=${req.body.title}`;
   Article.findOneAndUpdate({ title: req.body.title }, article).then((success) => {
     if (success) {
       req.flash('message', { msg: 'Update article success' });
