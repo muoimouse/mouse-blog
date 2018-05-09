@@ -189,8 +189,6 @@ const Router = express.Router();
 app.use('/api/v1', Router);
 Router.get('/article', articleApiController.getLastArticle);
 Router.get('/article/info', articleApiController.getArticleInfo);
-Router.get('/article/tag', articleApiController.getArticleByTag);
-Router.get('/article/category', articleApiController.getArticleByCategory);
 
 /**
  * Error Handler

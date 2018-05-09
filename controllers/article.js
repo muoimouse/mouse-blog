@@ -107,7 +107,7 @@ exports.postCreateArticle = (req, res) => {
     // Define new article
     const article = new Article({
       title: req.body.title,
-      keyword: changeAlias(req.body.title),
+      keyword: `${now}-${changeAlias(req.body.title)}`,
       tags: req.body.tags.split(','),
       articleCategory: req.body.articleCategory,
       content: req.body.content
@@ -156,7 +156,7 @@ exports.postUpdateArticle = (req, res) => {
   }
   const article = {
     title: req.body.title,
-    keyword: changeAlias(req.body.title),
+    keyword: `${now}-${changeAlias(req.body.title)}`,
     tags: req.body.tags.split(','),
     articleCategory: req.body.articleCategory,
     content: req.body.content

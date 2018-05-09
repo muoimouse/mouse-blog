@@ -6,13 +6,26 @@ const Article = require('../models/Article');
  * @param res
  */
 exports.getLastArticle = (req, res) => {
+  const { tags, keyword, articleCategory } = req.query;
   const response = {};
-  Article.find().sort('-createdAt').then((results) => {
-    response.data = results;
-    res.json(response);
-  }).catch(() => {
-    res.json({ error: 'get top article fail' });
-  });
+  const search = {};
+  if (tags) {
+    search.tags = { $in: [tags] };
+  }
+  if (keyword) {
+    search.keyword = new RegExp(keyword, 'i');
+  }
+  if (articleCategory) {
+    search.articleCategory = articleCategory;
+  }
+  Article.find(search).sort('-createdAt').limit(1)
+    .then((results) => {
+      response.data = results;
+      res.json(response);
+    })
+    .catch(() => {
+      res.json({ error: 'get article fail' });
+    });
 };
 
 /**
@@ -36,58 +49,6 @@ exports.getArticleInfo = (req, res) => {
     res.json(response);
   }).catch(() => {
     response.errors = 'get article fail';
-    res.json(response);
-  });
-};
-
-/**
- * Get article by tag
- * @param req
- * @param res
- */
-exports.getArticleByTag = (req, res) => {
-  console.log(req.query);
-  const response = {};
-  req.assert('tag', 'tag can not be blank').notEmpty();
-
-  const errors = req.validationErrors();
-  if (errors) {
-    response.errors = errors.msg;
-  }
-
-  Article.find({
-    tags: { $in: [req.query.tag] }
-  }).sort('-createdAt').then((results) => {
-    response.data = results || [];
-    res.json(response);
-  }).catch(() => {
-    response.errors = 'get articles by tag fail';
-    res.json(response);
-  });
-};
-
-/**
- * Get article by category
- * @param req
- * @param res
- */
-exports.getArticleByCategory = (req, res) => {
-  console.log(req.query);
-  const response = {};
-  req.assert('category', 'category can not be blank').notEmpty();
-
-  const errors = req.validationErrors();
-  if (errors) {
-    response.errors = errors.msg;
-  }
-
-  Article.find({
-    articleCategory: req.query.category
-  }).sort('-createdAt').then((results) => {
-    response.data = results || [];
-    res.json(response);
-  }).catch(() => {
-    response.errors = 'get articles by category fail';
     res.json(response);
   });
 };
