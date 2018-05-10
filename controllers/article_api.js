@@ -18,7 +18,7 @@ exports.getLastArticle = (req, res) => {
   if (articleCategory) {
     search.articleCategory = articleCategory;
   }
-  Article.find(search).sort('-createdAt').limit(1)
+  Article.find(search).sort('-createdAt').limit(10)
     .then((results) => {
       response.data = results;
       res.json(response);

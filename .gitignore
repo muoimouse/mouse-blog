@@ -26,6 +26,7 @@ public/css/main.css
 # Dependency directory
 node_modules
 bower_components
+data
 
 # Editors
 .idea
@@ -37,7 +38,6 @@ modules.xml
 # Folder config file
 Desktop.ini
 config/ssl/server
-data
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/

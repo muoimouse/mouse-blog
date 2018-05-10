@@ -1,0 +1,36 @@
+{ 
+    "_id" : ObjectId("5af3c166780df301873eec31"), 
+    "type" : "category", 
+    "name" : "javascript", 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5af3c169780df301873eec32"), 
+    "type" : "category", 
+    "name" : "nodejs", 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5af3c16c780df301873eec33"), 
+    "type" : "category", 
+    "name" : "reactjs", 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5af3c1f6780df301873eec35"), 
+    "type" : "tag", 
+    "name" : "DI", 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5af3c232780df301873eec37"), 
+    "type" : "tag", 
+    "name" : "code", 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5af3c263780df301873eec39"), 
+    "type" : "tag", 
+    "name" : "regx", 
+    "__v" : NumberInt(0)
+}
